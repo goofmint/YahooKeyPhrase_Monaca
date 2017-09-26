@@ -1,18 +1,30 @@
 // Yahoo! デベロッパーネットワークで取得したアプリのIDに書き換えてください
 let yahooAppId = 'YOUR_YAHOO_APP_ID';
 
-let wikipediaUrl = 'https://ja.wikipedia.org/w/api.php?format=json&action=query&rvparse=1&rvprop=content&prop=revisions&titles=';
+let wikipediaUrl = 'https://ja.wikipedia.org/w/api.php';
 let yahooUrl = 'https://jlp.yahooapis.jp/KeyphraseService/V1/extract';
 
 ons.ready(function() {
   $('#load').on('click', function(e) {
     
     let keyword = $('#keyword').val();
-    let url = `${wikipediaUrl}${keyword}`;
+    
     // Wikipediaのコンテンツを取得します
     $.ajax({
-      url: url,
-      dataType: 'json'
+      url: wikipediaUrl,
+      dataType: 'json',
+      data: {
+        format: 'json',
+        // アクション
+        action: 'query',
+        // rvparseをつけるとMediaWiki記法ではなくHTMLで返ってきます
+        rvparse: 1,
+        // 本文取得の指定です
+        rvprop: 'content',
+        // 欲しい情報の指定です
+        prop: 'revisions',
+        titles: keyword
+      }
     })
     .then(function(results) {
       //本文を抽出します
